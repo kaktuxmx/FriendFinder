@@ -14,6 +14,10 @@ const PORT = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+//Router
+
+require("./app//apiRoutes")(app);
+require("./app/routing/htmlRoutes")(app);
 
 //Listener for the Server
 

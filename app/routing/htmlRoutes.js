@@ -5,6 +5,7 @@
 console.log('HTML route connected!');
 
 //Dependencies
+var path = require("path");
 
 // Routh for the HTML
 module.exports = function(app){
@@ -13,7 +14,8 @@ module.exports = function(app){
         res.sendFile(path.join(__dirname, '/../public/survey.html'));
     });
     //GET Route for the home page
-    app.get("*", function(req, res) {
+    app.get("*", function(req, 
+        res) {
         res.sendFile(path.join(__dirname, '/../public/home.html'));
     });
 };

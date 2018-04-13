@@ -13,91 +13,45 @@ module.exports = function(app) {
 
     app.post('/api/friends', function (req, res){
 
-        var newFriend = req.body;
-/// need to put the comparation keep
-        for ()
-    })
-}
+        var bestFriend = {
+            name: "",
+            picture: "",
+            friendDif: Infinity
+        };
 
+        // User survey results are here:
 
+        var userResult = req.body;
+        var userScore = userResult.scores;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.log('apiRoute Connected');
-//load data source which holds the friend array information
-var friendMatch = require('../data/friends.js');
-
-//ROUTING
-// Two Routes with express parameters
-module.exports = function (app) {
-    // A GET json route to display all possible friends
-    app.get('/api/friends', function (req, res) {
-        res.json(friendMatch);
-    });
-    // A POST route to handle incoming survey results
-    app.post('/api/friends', function (req, res) {
-
-        //req.body is available since we're using body-parser middleware
-        var newFriend = req.body;
-        //score loop
-        for (var i = 0; i < newFriend.scores.length; i++) {
-            if (newFriend.scores[i] == "1 (Strongly Disagree)") {
-
-                newFriend.scores[i] = 1;
-            } else if (newFriend.scores[i] == "5 (Strongly Agree)") {
-
-                newFriend.scores[i] = 5;
-            } else {
-
-                newFriend.scores[i] = parseInt(newFriend.scores[i]);
-            }
-        }
-
-        //array for the comparison
-        var comparisonArray = [];
+        //to calculate diff
+        var totalDif = 0;
 
         for (var i = 0; i < friendMatch.length; i++) {
-            //Determine the users most compatible friend
-            var comparedFriend = friendMatch[i];
-            //calculate the totaldifference between friends
-            var totalDifference = 0;
+            var currentFriend = friendMatch[i];
+            totalDif = 0;
 
-            for (var k = 0; k < comparedFriend.scores.length; k++) {
-                //return the absolute value of a number *use abs()method
-                var differenceOneScore = Math.abs(comparedFriend.scores[k] - newFriend.scores[k]);
-                totalDifference += differenceOneScore;
+            console.log(currentFriend.name);
+
+            //now we loop for all scores
+
+            for (var j = 0; j < currentFriend.scores.length; j++) {
+                var currentFriendScore = currentFriend.scores[j];
+                var currentUserScore = userScores[j];
+
+                totalDif += Math.abs(parseInt(currentUserScore) - parseInt(currentFriendScore));
             }
 
-            comparisonArray[i] = totalDifference;
-        }
-
-        var bestFriendNum = comparisonArray[0];
-        var bestFriendI = 0;
-
-        for (var i = 1; i < comparisonArray.length; i++) {
-            if (comparisonArray[i] < bestFriendNum) {
-                bestFriendNum = comparisonArray[i];
-                bestFriendI = i;
+                if (totalDif <= bestFriend.friendDif) {
+                    bestFriend.name = currentFriend.name;
+                    bestFriend.picture = currentFriend.picture;
+                    bestFriend.friendDif = totalDif;
+                }
             }
-        }
-        //push new friend
-        friendMatch.push(newFriend);
-        //json bf to the current friend match array
-        res.json(friendMatch[bestFriendI]);
-    });
-};
 
+            friends.push(userResult);
 
+            res.json(bestFriend);
+            });
+    };
 
